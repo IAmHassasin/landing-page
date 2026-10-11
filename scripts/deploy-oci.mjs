@@ -48,27 +48,41 @@ function loadConfig() {
   if (existsSync(ENV_FILE)) {
     for (const line of readFileSync(ENV_FILE, 'utf8').split(/\r?\n/)) {
       const match = line.match(/^\s*([A-Z_]+)\s*=\s*(.*?)\s*$/);
-      if (match && config[match[1]] === undefined) config[match[1]] = match[2];
+      // Surrounding quotes are allowed in .env files and are not part of the value.
+      if (match && config[match[1]] === undefined) {
+        config[match[1]] = match[2].replace(/^(['"])(.*)\1$/, '$2');
+      }
     }
   }
   const missing = REQUIRED.filter((name) => !config[name]);
   if (missing.length > 0) {
     throw new Error(`Missing ${missing.join(', ')} (set them in .env.deploy or the environment)`);
   }
-  return { ...config, DEPLOY_PREFIX: config.DEPLOY_PREFIX.replace(/^\/+|\/+$/g, '') };
+  const prefix = config.DEPLOY_PREFIX.replace(/^\/+|\/+$/g, '');
+  // The prefix scopes uploads and --prune; never let it widen to the bucket root or climb out.
+  if (!/^[A-Za-z0-9._-]+(\/[A-Za-z0-9._-]+)*$/.test(prefix) || prefix.split('/').includes('..')) {
+    throw new Error(
+      `DEPLOY_PREFIX must be a folder name like "landing" (got "${config.DEPLOY_PREFIX}")`,
+    );
+  }
+  return { ...config, DEPLOY_PREFIX: prefix };
 }
 
 function listFiles(dir) {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
-    const path = join(dir, entry.name);
-    return entry.isDirectory() ? listFiles(path) : [path];
-  });
+  // Dotfiles (.gitkeep and the like) are repository plumbing, never site content.
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((entry) => !entry.name.startsWith('.'))
+    .flatMap((entry) => {
+      const path = join(dir, entry.name);
+      return entry.isDirectory() ? listFiles(path) : [path];
+    });
 }
 
 // Runs `oci os <command...> <args...>` without a shell, so values with spaces stay intact.
 async function oci(command, args, config) {
+  // OCI_CLI may point at the executable; .cmd/.bat shims cannot run without a shell.
   const { stdout } = await run(
-    'oci',
+    config.OCI_CLI || 'oci',
     [
       'os',
       ...command,
@@ -94,7 +108,9 @@ async function inBatches(items, worker) {
         try {
           await worker(item);
         } catch (error) {
-          failures.push(`${item.key ?? item}: ${error.message.split('\n')[0]}`);
+          // execFile's message is only "Command failed: ..."; the cause is in stderr.
+          const detail = (error.stderr || error.message).trim().split('\n').slice(-3).join(' ');
+          failures.push(`${item.key ?? item}: ${detail}`);
         }
       }
     }),
@@ -118,7 +134,7 @@ async function main() {
     `Uploading ${files.length} files to ${config.OCI_BUCKET}/${config.DEPLOY_PREFIX}/ (${config.OCI_REGION})`,
   );
   let done = 0;
-  const failures = await inBatches(files, async (file) => {
+  const upload = async (file) => {
     await oci(
       ['object', 'put'],
       [
@@ -136,13 +152,24 @@ async function main() {
     );
     done += 1;
     if (done % 20 === 0 || done === files.length) console.log(`  ${done}/${files.length}`);
-  });
-  if (failures.length > 0) throw new Error(`Upload failed for:\n- ${failures.join('\n- ')}`);
+  };
+  // Assets first, HTML last: live pages never reference files that are not uploaded yet,
+  // and a failed asset upload stops the deploy before any page changes.
+  const assets = files.filter((file) => !file.key.endsWith('.html'));
+  const pages = files.filter((file) => file.key.endsWith('.html'));
+  for (const group of [assets, pages]) {
+    const failures = await inBatches(group, upload);
+    if (failures.length > 0) throw new Error(`Upload failed for:\n- ${failures.join('\n- ')}`);
+  }
 
   if (prune) {
-    const listing = JSON.parse(
-      await oci(['object', 'list'], ['--prefix', `${config.DEPLOY_PREFIX}/`, '--all'], config),
+    // The CLI prints nothing at all when the prefix holds no objects.
+    const output = await oci(
+      ['object', 'list'],
+      ['--prefix', `${config.DEPLOY_PREFIX}/`, '--all'],
+      config,
     );
+    const listing = output.trim() ? JSON.parse(output) : { data: [] };
     const built = new Set(files.map((file) => file.objectName));
     const stale = (listing.data ?? [])
       .map((object) => object.name)

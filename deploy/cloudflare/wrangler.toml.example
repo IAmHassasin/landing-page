@@ -1,0 +1,16 @@
+# Optional: deploy the worker with Wrangler instead of the dashboard.
+# Copy to wrangler.toml in this folder, then run:  npx wrangler deploy
+name = "hassasin-landing"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# Attaches the worker to both hostnames and creates their DNS records
+# (remove conflicting A/AAAA/CNAME records for @ and www first, see docs/DEPLOY.md).
+routes = [
+  { pattern = "hassasin.com", custom_domain = true },
+  { pattern = "www.hassasin.com", custom_domain = true },
+]
+
+[vars]
+APEX_HOST = "hassasin.com"
+ORIGIN_BASE = "https://objectstorage.ap-singapore-2.oraclecloud.com/n/axqtl5gbgwnz/b/portfolio-site-static-dev/o/landing"

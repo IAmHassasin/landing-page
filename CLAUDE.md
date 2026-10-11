@@ -12,20 +12,24 @@ Plan and accepted requirements: [docs/PLAN.md](docs/PLAN.md).
 
 ## Commands
 
-| Command                | Purpose                                                                                 |
-| ---------------------- | --------------------------------------------------------------------------------------- |
-| `npm run dev`          | Dev server (use `astro dev --background` for background mode; `astro dev stop` to stop) |
-| `npm run check`        | `astro check` (type-check) + i18n key parity check                                      |
-| `npm run lint`         | ESLint (check only, never `--fix` in review/CI)                                         |
-| `npm run format:check` | Prettier check                                                                          |
-| `npm run build`        | Static build to `dist/`                                                                 |
-| `npm run media:status` | Report promo clips per project and spec violations                                      |
+| Command                         | Purpose                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev`                   | Dev server (use `astro dev --background` for background mode; `astro dev stop` to stop)     |
+| `npm run check`                 | `astro check` (type-check) + i18n key parity check                                          |
+| `npm run lint`                  | ESLint (check only, never `--fix` in review/CI)                                             |
+| `npm run format:check`          | Prettier check                                                                              |
+| `npm run build`                 | Static build to `dist/`                                                                     |
+| `npm run media:status`          | Report promo clips per project and spec violations                                          |
+| `npm run media:import -- <dir>` | Re-encode rendered clips into `public/media/projects/`                                      |
+| `npm run deploy:oci`            | Upload `dist/` to OCI (`.env.deploy`); Cloudflare steps in [docs/DEPLOY.md](docs/DEPLOY.md) |
 
 Run `check`, `lint`, `format:check` and `build` before reporting work as done.
+Deploying (bucket upload, Cloudflare worker/DNS) is an infrastructure change: only with the owner's go-ahead.
 
 ## Conventions
 
 - Source code, comments, identifiers and commit messages are English only.
+  Owner-facing docs in `docs/` (plan, deploy guide) may be Vietnamese; they are not shipped with the site.
 - **Localization exception (declared):** Vietnamese text is allowed ONLY in localization data files:
   - `src/i18n/locales/vi.json`
   - future content-collection entries under a `vi/` folder (e.g. `src/content/projects/vi/*.md`)
