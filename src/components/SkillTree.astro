@@ -1,0 +1,113 @@
+---
+import { SECTION_IDS } from '../config/site';
+import { SKILL_GROUPS } from '../data/skills';
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale)).skills;
+const groups = SKILL_GROUPS.map((group) => ({
+  key: group.key,
+  label: t.groups[group.key],
+  items: [...group.items, ...(t.proseItems[group.key as keyof typeof t.proseItems] ?? [])],
+}));
+---
+
+<section id={SECTION_IDS.skills} class="section" aria-labelledby="skills-title">
+  <header class="section-head" data-reveal>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 id="skills-title" class="section-title">
+      {t.title}
+    </h2>
+  </header>
+
+  <div class="tree">
+    {groups.map((group) => (
+      <div class="branch" data-reveal>
+        <h3 class="branch-name">{group.label}</h3>
+        <ul class="nodes">
+          {group.items.map((item) => (
+            <li class="node">{item}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  /* Each group is a branch: a label on the trunk line, nodes hanging off it. */
+  .tree {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 0 40px;
+  }
+
+  .branch {
+    display: grid;
+    align-items: start;
+    align-content: start;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 16px;
+    padding: 18px 0;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .branch-name {
+    color: var(--color-ink);
+    font-family: var(--font-pixel);
+    font-size: 1.375rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  /* Chips keep their own height; rows must not stretch to match a taller neighbouring branch. */
+  .nodes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .node {
+    position: relative;
+    padding: 4px 10px 4px 22px;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-s);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  /* Unlocked-node pip. */
+  .node::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 9px;
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent);
+    transform: translateY(-50%);
+  }
+
+  .node:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 480px) {
+    .branch {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+    }
+  }
+</style>

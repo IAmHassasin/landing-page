@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import avatarDark from '../assets/avatar/avatar-dark.webp';
+import avatarLight from '../assets/avatar/avatar-light.webp';
+
+interface Props {
+  alt: string;
+}
+
+const { alt } = Astro.props;
+const SIZES = '(max-width: 640px) 112px, min(20vw, 320px)';
+const WIDTHS = [112, 224, 320, 480, 640];
+const ratio = `${avatarLight.width} / ${avatarLight.height}`;
+---
+
+<!--
+  Two pre-rendered variants of the same photo: dark outfit for the light theme,
+  white outfit for the dark theme (see tools/avatar). The dark variant is decorative
+  so screen readers announce the portrait only once, and it loads at low priority
+  so it does not compete with the visible hero image.
+-->
+<div class="avatar">
+  <Image
+    class="variant variant-light"
+    src={avatarLight}
+    alt={alt}
+    widths={WIDTHS}
+    sizes={SIZES}
+    loading="eager"
+    fetchpriority="high"
+  />
+  <Image
+    class="variant variant-dark"
+    src={avatarDark}
+    alt=""
+    aria-hidden="true"
+    widths={WIDTHS}
+    sizes={SIZES}
+    loading="eager"
+    fetchpriority="low"
+  />
+</div>
+
+<style define:vars={{ ratio }}>
+  .avatar {
+    display: grid;
+    aspect-ratio: var(--ratio);
+  }
+
+  .variant {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    transition: opacity var(--duration-theme) var(--ease-out);
+  }
+
+  .variant-dark {
+    opacity: 0;
+  }
+
+  /* Hide the light variant too: both share soft alpha edges, which would otherwise stack into a dark rim. */
+  :global([data-theme='dark']) .variant-light {
+    opacity: 0;
+  }
+
+  :global([data-theme='dark']) .variant-dark {
+    opacity: 1;
+  }
+
+  /* No-JS visitors with a dark OS: tokens already switch, so switch the photo too. */
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme])) .variant-light {
+      opacity: 0;
+    }
+
+    :global(:root:not([data-theme])) .variant-dark {
+      opacity: 1;
+    }
+  }
+</style>

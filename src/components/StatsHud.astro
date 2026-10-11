@@ -1,0 +1,90 @@
+---
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale)).stats;
+---
+
+<section class="hud" aria-label={t.label}>
+  <ul class="hud-list">
+    {t.items.map((item) => (
+      <li class="hud-item">
+        <span class="value">
+          <span class="number" data-count-to={item.value}>
+            {item.value}
+          </span>
+          <span class="suffix">{item.suffix}</span>
+        </span>
+        <span class="label">{item.label}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .hud {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  .hud-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block: 1px solid var(--color-rule);
+  }
+
+  .hud-item {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: 22px 20px;
+  }
+
+  .hud-item + .hud-item {
+    border-left: 1px solid var(--color-rule);
+  }
+
+  .value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--color-ink);
+  }
+
+  .number {
+    font-family: var(--font-pixel);
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    line-height: 0.85;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .suffix {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+  }
+
+  .label {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 760px) {
+    .hud-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hud-item:nth-child(3) {
+      border-left: 0;
+    }
+
+    .hud-item:nth-child(n + 3) {
+      border-top: 1px solid var(--color-rule);
+    }
+  }
+</style>

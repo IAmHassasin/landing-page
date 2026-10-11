@@ -1,0 +1,62 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getDictionary, getHomePath, toLocale } from '../i18n';
+
+const locale = toLocale(Astro.currentLocale);
+const t = getDictionary(locale).notFound;
+---
+
+<BaseLayout>
+  <SiteHeader />
+  <main id="main" class="not-found">
+    <p class="eyebrow">{t.eyebrow}</p>
+    <p class="code" aria-hidden="true">
+      404
+    </p>
+    <h1 class="section-title">{t.title}</h1>
+    <p class="section-intro">{t.body}</p>
+    <a class="home" href={getHomePath(locale)}>
+      {t.home}
+    </a>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: clamp(48px, 10vw, 120px) var(--gutter);
+  }
+
+  .code {
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-pixel);
+    font-size: clamp(6rem, 22vw, 12rem);
+    line-height: 0.8;
+    animation: blink 1.2s steps(1) infinite;
+  }
+
+  .home {
+    margin-top: 12px;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .code {
+      animation: none;
+    }
+  }
+</style>

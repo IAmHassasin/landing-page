@@ -1,0 +1,56 @@
+---
+import { LOCALES, getDictionary, getHomePath, toLocale } from '../i18n';
+
+const current = toLocale(Astro.currentLocale);
+const t = getDictionary(current);
+---
+
+<nav class="language-switch" aria-label={t.language.switchLabel}>
+  {LOCALES.map((locale) => {
+    const target = getDictionary(locale);
+    return (
+      <a
+        href={getHomePath(locale)}
+        hreflang={locale}
+        lang={locale}
+        title={target.language.selfName}
+        aria-current={locale === current ? 'page' : undefined}
+      >
+        {target.language.code}
+      </a>
+    );
+  })}
+</nav>
+
+<style>
+  .language-switch {
+    display: inline-flex;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-s);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  a {
+    display: inline-grid;
+    place-items: center;
+    min-width: 40px;
+    height: 38px;
+    padding: 0 8px;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  a:hover {
+    color: var(--color-ink);
+  }
+
+  a[aria-current='page'] {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+</style>

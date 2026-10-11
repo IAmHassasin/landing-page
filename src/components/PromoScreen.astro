@@ -1,0 +1,258 @@
+---
+import type { Project, PromoMedia } from '../lib/projects';
+import { getDictionary, toLocale } from '../i18n';
+
+interface Props {
+  title: string;
+  status: Project['data']['status'];
+  promo: PromoMedia | null;
+  // false = this project never gets a clip (description only).
+  promoEnabled: boolean;
+}
+
+const { title, status, promo, promoEnabled } = Astro.props;
+const t = getDictionary(toLocale(Astro.currentLocale)).projects;
+
+const initials = title
+  .split(/[\s:]+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((word) => word[0]?.toUpperCase())
+  .join('');
+const caption = promo ? t.promoLabel : promoEnabled ? t.promoPending : t.promoNone;
+---
+
+<figure class="screen" data-tilt>
+  <div class="bezel">
+    <div class="display">
+      {promo ? (
+        <>
+          {/* No controls on purpose: the script plays the clip whenever it is on screen. */}
+          <video
+            class="promo-video"
+            data-promo-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            disablepictureinpicture
+            disableRemotePlayback
+            controlslist="nodownload nofullscreen noremoteplayback"
+            tabindex="-1"
+            poster={promo.poster ?? undefined}
+            aria-label={`${title} — ${t.promoLabel}`}
+          >
+            {promo.webm && <source src={promo.webm} type="video/webm" />}
+            <source src={promo.mp4} type="video/mp4" />
+          </video>
+          {/* Transparent shield over the clip: clicks, long-press and the context menu hit this layer, not the video. */}
+          <span class="shield" data-promo-shield aria-hidden="true" />
+        </>
+      ) : (
+        <div class="no-signal" aria-hidden="true">
+          <span class="glyph">{initials}</span>
+          {promoEnabled && <span class="signal-label">{t.noSignal}</span>}
+        </div>
+      )}
+      <span class="scanlines" aria-hidden="true"></span>
+    </div>
+    <figcaption class="caption">
+      <span class={`led led-${status}`} aria-hidden="true"></span>
+      <span>{caption}</span>
+      <span class="ratio" aria-hidden="true">
+        1:1
+      </span>
+    </figcaption>
+  </div>
+</figure>
+
+<style>
+  .screen {
+    margin: 0;
+    perspective: 900px;
+  }
+
+  .bezel {
+    padding: 14px 14px 10px;
+    border: 1px solid var(--color-bezel-edge);
+    border-radius: 18px;
+    background: var(--color-bezel);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.06) inset,
+      0 30px 60px -30px rgb(0 0 0 / 0.55),
+      0 0 0 6px var(--color-glow);
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 400ms var(--ease-out);
+    will-change: transform;
+  }
+
+  .display {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--color-screen);
+  }
+
+  .promo-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .promo-video,
+  .shield {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .shield {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .no-signal {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 6px;
+    color: var(--color-screen-ink);
+    font-family: var(--font-pixel);
+    background:
+      radial-gradient(circle at 50% 45%, rgb(126 224 208 / 0.12), transparent 60%),
+      var(--color-screen);
+  }
+
+  /* Static noise: a tiny tiled SVG turbulence shifted in steps. */
+  .no-signal::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.88 0 0 0 0 0.82 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.22;
+    animation: static-noise 600ms steps(6) infinite;
+  }
+
+  /* Rolling bright band, like an untuned CRT. */
+  .no-signal::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    height: 18%;
+    background: linear-gradient(transparent, rgb(126 224 208 / 0.1), transparent);
+    animation: roll 3.2s linear infinite;
+  }
+
+  .glyph {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(4.5rem, 12vw, 7.5rem);
+    line-height: 0.9;
+    text-shadow: 0 0 18px rgb(126 224 208 / 0.45);
+  }
+
+  .signal-label {
+    position: relative;
+    z-index: 1;
+    font-size: 1.25rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    animation: blink 1.4s steps(1) infinite;
+  }
+
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, rgb(0 0 0 / 0.18) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply;
+  }
+
+  .caption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 4px 0;
+    color: var(--color-bezel-ink);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .ratio {
+    margin-left: auto;
+    opacity: 0.7;
+  }
+
+  .led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-led-work);
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  .led-live {
+    color: var(--color-led-live);
+    background: var(--color-led-live);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .led-working,
+  .led-prototype {
+    color: var(--color-led-work);
+    background: var(--color-led-work);
+  }
+
+  .led-inProgress {
+    color: var(--color-led-wip);
+    background: var(--color-led-wip);
+  }
+
+  @keyframes static-noise {
+    to {
+      transform: translate(12%, 9%);
+    }
+  }
+
+  @keyframes roll {
+    from {
+      top: -20%;
+    }
+    to {
+      top: 105%;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bezel {
+      transform: none;
+    }
+
+    .no-signal::before,
+    .no-signal::after,
+    .signal-label,
+    .led-live {
+      animation: none;
+    }
+  }
+</style>

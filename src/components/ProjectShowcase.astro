@@ -1,0 +1,183 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { PROJECT_CATEGORIES } from '../content.config';
+import { SECTION_IDS } from '../config/site';
+import { getDictionary, toLocale } from '../i18n';
+import { getProjects } from '../lib/projects';
+
+const locale = toLocale(Astro.currentLocale);
+const t = getDictionary(locale).projects;
+const projects = await getProjects(locale);
+const usedCategories = PROJECT_CATEGORIES.filter((category) =>
+  projects.some((project) => project.data.category === category),
+);
+---
+
+<section id={SECTION_IDS.projects} class="section" aria-labelledby="projects-title">
+  <header class="section-head" data-reveal>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 id="projects-title" class="section-title">
+      {t.title}
+    </h2>
+    <p class="section-intro">{t.intro}</p>
+  </header>
+
+  <!-- Hidden until the script wires it up; without JS every project is listed anyway. -->
+  <div class="filters" role="group" aria-label={t.filterLabel} data-project-filters hidden>
+    <button type="button" class="filter" data-filter="all" aria-pressed="true">
+      {t.all}
+      <span class="count">{projects.length}</span>
+    </button>
+    {usedCategories.map((category) => (
+      <button type="button" class="filter" data-filter={category} aria-pressed="false">
+        {t.categories[category]}
+        <span class="count">
+          {projects.filter((project) => project.data.category === category).length}
+        </span>
+      </button>
+    ))}
+  </div>
+
+  <div class="list" data-project-list>
+    {projects.map((project, index) => (
+      <ProjectCard project={project} side={index % 2 === 0 ? 'start' : 'end'} />
+    ))}
+  </div>
+
+  <aside class="side-quests" aria-labelledby="side-quests-title" data-reveal>
+    <h3 id="side-quests-title" class="side-title">
+      {t.sideQuests.title}
+    </h3>
+    <ul class="side-list">
+      {t.sideQuests.items.map((item) => (
+        <li>
+          <a href={item.url} target="_blank" rel="noopener noreferrer">
+            <span class="side-name">{item.name}</span>
+            <span class="side-note">{item.note}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+</section>
+
+<style>
+  .filters[hidden] {
+    display: none;
+  }
+
+  .filters {
+    position: sticky;
+    top: 64px;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 0;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Narrow screens: one scrollable row so the sticky bar stays short. */
+  @media (max-width: 640px) {
+    .filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: var(--gutter);
+    }
+
+    .filter {
+      flex: none;
+    }
+  }
+
+  .filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-s);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .filter:hover {
+    border-color: var(--color-accent);
+  }
+
+  .filter[aria-pressed='true'] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-bg);
+  }
+
+  .count {
+    font-family: var(--font-pixel);
+    font-size: 1.125rem;
+    line-height: 1;
+    opacity: 0.7;
+  }
+
+  .list {
+    margin-top: 16px;
+  }
+
+  .side-quests {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 28px;
+    border: 1px dashed var(--color-rule);
+    border-radius: var(--radius-m);
+  }
+
+  .side-title {
+    font-family: var(--font-pixel);
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .side-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 16px 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .side-list a {
+    display: grid;
+    gap: 4px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .side-name {
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  .side-list a:hover .side-name {
+    color: var(--color-accent);
+  }
+
+  .side-note {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+</style>

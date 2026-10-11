@@ -1,0 +1,177 @@
+---
+import { SECTION_IDS } from '../config/site';
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale)).awards;
+---
+
+<section id={SECTION_IDS.awards} class="section" aria-labelledby="awards-title">
+  <header class="section-head" data-reveal>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 id="awards-title" class="section-title">
+      {t.title}
+    </h2>
+  </header>
+
+  <ul class="trophies">
+    {t.items.map((item) => (
+      <li class="trophy" data-reveal>
+        <span class="badge" aria-hidden="true">
+          <span class="cup" />
+        </span>
+        <div class="text">
+          <p class="unlocked">{t.unlocked}</p>
+          <h3 class="name">{item.name}</h3>
+          <p class="event">{item.event}</p>
+          <p class="detail">{item.detail}</p>
+        </div>
+        <a class="more" href={item.url} target="_blank" rel="noopener noreferrer">
+          {item.linkLabel}
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .trophies {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Styled like a console "achievement unlocked" toast. */
+  .trophy {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 28px;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-m);
+    background:
+      linear-gradient(110deg, transparent 40%, var(--color-glow) 50%, transparent 60%) 0 0 / 250%
+        100%,
+      var(--color-surface);
+    animation: shine 6s var(--ease-out) infinite;
+  }
+
+  .badge {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 6px var(--color-glow);
+  }
+
+  /* Pixel trophy cup drawn with box-shadows on a 4px grid. */
+  .cup {
+    width: 4px;
+    height: 4px;
+    color: var(--color-accent);
+    background: currentColor;
+    box-shadow:
+      -8px -12px,
+      -4px -12px,
+      0 -12px,
+      4px -12px,
+      8px -12px,
+      -12px -8px,
+      -8px -8px,
+      -4px -8px,
+      0 -8px,
+      4px -8px,
+      8px -8px,
+      12px -8px,
+      -12px -4px,
+      -4px -4px,
+      0 -4px,
+      4px -4px,
+      12px -4px,
+      -8px 0,
+      -4px 0,
+      4px 0,
+      8px 0,
+      0 4px,
+      -4px 8px,
+      0 8px,
+      4px 8px,
+      -8px 12px,
+      -4px 12px,
+      0 12px,
+      4px 12px,
+      8px 12px;
+    transform: translateY(-2px);
+  }
+
+  .text {
+    display: grid;
+    gap: 2px;
+  }
+
+  .unlocked {
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-pixel);
+    font-size: 1.125rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .name {
+    font-size: clamp(1.375rem, 2.6vw, 1.875rem);
+    font-weight: 800;
+  }
+
+  .event {
+    margin: 0;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .detail {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .more {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  @keyframes shine {
+    0%,
+    60% {
+      background-position:
+        120% 0,
+        0 0;
+    }
+    100% {
+      background-position:
+        -60% 0,
+        0 0;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .trophy {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .more {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trophy {
+      animation: none;
+    }
+  }
+</style>

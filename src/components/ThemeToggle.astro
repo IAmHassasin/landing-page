@@ -1,0 +1,166 @@
+---
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale));
+---
+
+<button
+  class="theme-toggle"
+  type="button"
+  data-theme-toggle
+  data-label-to-light={t.theme.toLight}
+  data-label-to-dark={t.theme.toDark}
+  aria-label={t.theme.toDark}
+  hidden
+>
+  <svg class="icon icon-sun" viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M7 0h2v3H7zM7 13h2v3H7zM0 7h3v2H0zM13 7h3v2h-3zM5 5h6v6H5zM2 2h2v2H2zM12 2h2v2h-2zM2 12h2v2H2zM12 12h2v2h-2z"></path>
+  </svg>
+  <svg class="icon icon-moon" viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M6 1h4v1H8v1H7v2H6v6h1v2h1v1h2v1H6v-1H4v-1H3v-2H2V5h1V3h1V2h2z"></path>
+  </svg>
+</button>
+
+<script>
+  import { THEME_STORAGE_KEY } from '../config/site';
+
+  type Theme = 'light' | 'dark';
+
+  const root = document.documentElement;
+  const osDark = matchMedia('(prefers-color-scheme: dark)');
+  // Tracks a choice made on this page view, so it still wins when storage is blocked.
+  let hasExplicitChoice = false;
+
+  function readStoredTheme(): Theme | null {
+    try {
+      const value = localStorage.getItem(THEME_STORAGE_KEY);
+      return value === 'light' || value === 'dark' ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function storeTheme(theme: Theme): void {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // Storage blocked: the choice still applies for this page view.
+    }
+  }
+
+  function currentTheme(): Theme {
+    return root.dataset.theme === 'dark' ? 'dark' : 'light';
+  }
+
+  function syncButtons(): void {
+    const theme = currentTheme();
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+      const label = theme === 'dark' ? button.dataset.labelToLight : button.dataset.labelToDark;
+      // The label names the action, so no aria-pressed (it would contradict the label).
+      if (label) button.setAttribute('aria-label', label);
+    });
+  }
+
+  function applyTheme(theme: Theme): void {
+    root.dataset.theme = theme;
+    syncButtons();
+  }
+
+  const REVEAL_DURATION_MS = 650;
+
+  // The new theme grows as a circle from the toggle. Falls back to the plain CSS
+  // crossfade where View Transitions are unsupported or motion is reduced.
+  function switchWithReveal(origin: HTMLElement, change: () => void): void {
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || reduceMotion) {
+      change();
+      return;
+    }
+    const rect = origin.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    root.classList.add('theme-switching');
+    const transition = document.startViewTransition(change);
+    transition.finished.finally(() => root.classList.remove('theme-switching'));
+    transition.ready
+      .then(() => {
+        root.animate(
+          {
+            clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`],
+          },
+          {
+            duration: REVEAL_DURATION_MS,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            pseudoElement: '::view-transition-new(root)',
+          },
+        );
+      })
+      .catch(() => {
+        // The transition was skipped; the theme has still been applied by `change`.
+      });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const next: Theme = currentTheme() === 'dark' ? 'light' : 'dark';
+      hasExplicitChoice = true;
+      storeTheme(next);
+      switchWithReveal(button, () => applyTheme(next));
+    });
+  });
+
+  // Keep following the OS until the visitor makes an explicit choice.
+  osDark.addEventListener('change', (event) => {
+    if (!hasExplicitChoice && readStoredTheme() === null) {
+      applyTheme(event.matches ? 'dark' : 'light');
+    }
+  });
+
+  // The button is hidden in the markup so no-JS visitors never see a control that does nothing.
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    button.hidden = false;
+  });
+  syncButtons();
+</script>
+
+<style>
+  .theme-toggle:not([hidden]) {
+    display: inline-grid;
+  }
+
+  .theme-toggle {
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-s);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--color-accent);
+  }
+
+  .icon {
+    grid-area: 1 / 1;
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    shape-rendering: crispEdges;
+    transition:
+      opacity var(--duration-theme) var(--ease-out),
+      transform var(--duration-theme) var(--ease-out);
+  }
+
+  /* Show the icon of the theme the button switches TO. */
+  :global([data-theme='light']) .icon-sun,
+  :global([data-theme='dark']) .icon-moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+</style>

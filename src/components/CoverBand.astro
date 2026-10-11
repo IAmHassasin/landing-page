@@ -1,0 +1,276 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Picture, getImage } from 'astro:assets';
+import { getDictionary, toLocale } from '../i18n';
+
+// One wide cover photo per theme, read as two times of the same day:
+// src/assets/cover/cover-light.* (afternoon) and cover-dark.* (sunset).
+// Optional: when no file exists the band is not rendered.
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/cover/cover-{light,dark}.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+
+function findCover(theme: 'light' | 'dark'): ImageMetadata | undefined {
+  const match = Object.entries(files).find(([path]) => path.includes(`/cover-${theme}.`));
+  return match?.[1].default;
+}
+
+const t = getDictionary(toLocale(Astro.currentLocale)).cover;
+const light = findCover('light');
+const dark = findCover('dark') ?? light;
+const SIZES = '100vw';
+const WIDTHS = [640, 960, 1280, 1920, 2560];
+// Low-resolution steps shown before the full photo, like a game streaming in its textures.
+const PIXEL_STEPS = [24, 48, 96];
+
+async function pixelSteps(src: ImageMetadata): Promise<string[]> {
+  const steps = await Promise.all(
+    PIXEL_STEPS.map((width) => getImage({ src, width, format: 'webp', quality: 70 })),
+  );
+  return steps.map((step) => step.src);
+}
+
+const variants =
+  light && dark
+    ? [
+        { theme: 'light', src: light, pixels: await pixelSteps(light), priority: 'high' },
+        { theme: 'dark', src: dark, pixels: await pixelSteps(dark), priority: 'low' },
+      ]
+    : [];
+---
+
+{variants.length > 0 && (
+  <div class="cover" data-cover aria-hidden="true">
+    <div class="parallax" data-cover-parallax>
+      {variants.map((variant) => (
+        <div class={`layer layer-${variant.theme}`}>
+          <Picture
+            class="photo"
+            src={variant.src}
+            alt=""
+            widths={WIDTHS.filter((width) => width <= variant.src.width)}
+            sizes={SIZES}
+            formats={['avif', 'webp']}
+            loading="eager"
+            fetchpriority={variant.priority as 'high' | 'low'}
+          />
+          {variant.pixels.map((src, index) => (
+            <img
+              class="pixel"
+              src={src}
+              alt=""
+              style={`--step: ${variant.pixels.length - index}`}
+              decoding="async"
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <div class="hud">
+      <span class="hud-stage">{t.stage}</span>
+      <span class="hud-time">
+        <span class="hud-icon" />
+        <span class="time-light">{t.timeLight}</span>
+        <span class="time-dark">{t.timeDark}</span>
+      </span>
+    </div>
+
+    <div class="dither">
+      <span class="band band-25" />
+      <span class="band band-50" />
+      <span class="band band-75" />
+    </div>
+  </div>
+)}
+
+<style>
+  /* Full-bleed band at the top of the page; its height is shared with the hero via --cover-h. */
+  .cover {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -2;
+    height: var(--cover-h, clamp(220px, 36vw, 500px));
+    overflow: hidden;
+  }
+
+  .parallax {
+    position: absolute;
+    inset: -8% 0 0;
+    transform: translate3d(0, var(--parallax, 0px), 0);
+    will-change: transform;
+  }
+
+  .layer {
+    position: absolute;
+    inset: 0;
+    transition: opacity var(--duration-theme) var(--ease-out);
+  }
+
+  .layer :global(picture) {
+    display: contents;
+  }
+
+  .layer :global(.photo),
+  .pixel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Keep the sun and the shoreline in frame on every width. */
+    object-position: 50% 58%;
+  }
+
+  .layer :global(.photo) {
+    animation: drift 40s ease-in-out infinite alternate;
+  }
+
+  /* Each theme is a time of day: afternoon for light, sunset for dark. */
+  .layer-dark,
+  :global([data-theme='dark']) .layer-light {
+    opacity: 0;
+  }
+
+  :global([data-theme='dark']) .layer-dark {
+    opacity: 1;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme])) .layer-light {
+      opacity: 0;
+    }
+
+    :global(:root:not([data-theme])) .layer-dark {
+      opacity: 1;
+    }
+  }
+
+  /*
+   * Pixel reveal: 24 → 48 → 96 px versions sit on top of the photo and drop away one by one.
+   * Without JS the steps run on a timer; with JS they wait until the photo has loaded.
+   */
+  .pixel {
+    image-rendering: pixelated;
+    animation: pixel-out 1ms steps(1) forwards;
+    animation-delay: calc(var(--step) * 140ms + 200ms);
+  }
+
+  :global(.js) .cover:not(.is-ready) .pixel {
+    animation-play-state: paused;
+  }
+
+  .hud {
+    position: absolute;
+    top: clamp(12px, 2vw, 24px);
+    left: 50%;
+    display: flex;
+    justify-content: space-between;
+    width: min(100%, var(--content-max));
+    padding: 0 var(--gutter);
+    color: var(--color-on-photo);
+    font-family: var(--font-pixel);
+    font-size: clamp(1rem, 1.6vw, 1.375rem);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-shadow:
+      0 1px 0 var(--color-photo-shadow),
+      0 0 12px var(--color-photo-shadow);
+    transform: translateX(-50%);
+  }
+
+  .hud-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Pixel sun that turns into a moon-ish half disc at dusk. */
+  .hud-icon {
+    width: 10px;
+    height: 10px;
+    background: var(--color-sun);
+    box-shadow: 0 0 10px var(--color-sun-glow);
+  }
+
+  :global([data-theme='dark']) .hud-icon {
+    background: linear-gradient(90deg, var(--color-dusk) 50%, transparent 0);
+  }
+
+  .time-dark,
+  :global([data-theme='dark']) .time-light {
+    display: none;
+  }
+
+  :global([data-theme='dark']) .time-dark {
+    display: inline;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme])) .hud-icon {
+      background: linear-gradient(90deg, var(--color-dusk) 50%, transparent 0);
+    }
+
+    :global(:root:not([data-theme])) .time-light {
+      display: none;
+    }
+
+    :global(:root:not([data-theme])) .time-dark {
+      display: inline;
+    }
+  }
+
+  /* Bottom edge dissolves into the page in 8px pixel-art dither steps instead of a smooth fade. */
+  .dither {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+  }
+
+  .band {
+    height: 24px;
+    background-size: 8px 8px;
+  }
+
+  .band-25 {
+    background-image: conic-gradient(var(--color-bg) 25%, transparent 0);
+  }
+
+  .band-50 {
+    background-image: repeating-conic-gradient(var(--color-bg) 0 25%, transparent 0 50%);
+  }
+
+  .band-75 {
+    background-image: conic-gradient(transparent 25%, var(--color-bg) 0);
+  }
+
+  @keyframes pixel-out {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes drift {
+    from {
+      transform: scale(1.04) translateX(-1%);
+    }
+    to {
+      transform: scale(1.1) translateX(1%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pixel {
+      display: none;
+    }
+
+    .layer :global(.photo) {
+      animation: none;
+    }
+
+    .parallax {
+      transform: none;
+    }
+  }
+</style>

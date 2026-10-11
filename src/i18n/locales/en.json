@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "title": "Kha Pham (Hassasin) — Senior Full-stack Engineer",
+    "description": "Portfolio of Kha Pham, aka Hassasin: senior full-stack engineer, R&D lead and indie game tinkerer."
+  },
+  "language": {
+    "code": "EN",
+    "selfName": "English",
+    "switchLabel": "Choose language"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "label": "Sections",
+    "projects": "Projects",
+    "skills": "Skills",
+    "journey": "Journey",
+    "awards": "Awards",
+    "contact": "Contact"
+  },
+  "theme": {
+    "toLight": "Switch to light theme",
+    "toDark": "Switch to dark theme"
+  },
+  "hero": {
+    "prompt": "hassasin.com",
+    "name": "Kha Pham",
+    "alias": "aka Hassasin",
+    "role": "Senior Full-stack Engineer · R&D / Product Lead",
+    "tagline": "“Anything that can go wrong, will go wrong”",
+    "intro": "I build cloud products for Japanese enterprise clients by day, and games, AI pipelines and odd tools by night. Hanoi, Vietnam.",
+    "ctaProjects": "See the projects",
+    "ctaGame": "Play the game",
+    "ctaCv": "Read the CV",
+    "pressStart": "Press start",
+    "avatarAlt": "Portrait of Kha Pham wearing glasses"
+  },
+  "notFound": {
+    "eyebrow": "Game over",
+    "title": "This level does not exist",
+    "body": "The page you were looking for is not here. It may have moved, or the link has a typo.",
+    "home": "Back to the start"
+  },
+  "cover": {
+    "stage": "Stage 01",
+    "timeLight": "Golden hour",
+    "timeDark": "After dark"
+  },
+  "stats": {
+    "label": "Player stats",
+    "items": [
+      { "value": "5", "suffix": "yrs", "label": "shipping production full-stack" },
+      { "value": "2", "suffix": "apps", "label": "live on the Atlassian Marketplace" },
+      { "value": "5", "suffix": "platforms", "label": "enterprise platforms shipped" },
+      { "value": "4", "suffix": "devs", "label": "on the team I lead since 2025" }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Quest log",
+    "title": "Things I build after hours",
+    "intro": "Personal projects: games, AI pipelines, tools and media experiments. Each one taught me something I now use at work.",
+    "filterLabel": "Filter projects by category",
+    "all": "All",
+    "categories": {
+      "games": "Games",
+      "ai": "AI & automation",
+      "tools": "Tools & web",
+      "media": "Media & streaming"
+    },
+    "status": {
+      "live": "Live",
+      "working": "Working",
+      "prototype": "Prototype",
+      "inProgress": "In progress"
+    },
+    "links": {
+      "play": "Play it",
+      "live": "Open the site",
+      "repo": "Source on GitHub"
+    },
+    "stackLabel": "Built with",
+    "highlightsLabel": "Highlights",
+    "promoLabel": "Promo clip",
+    "promoPending": "Promo clip loading soon",
+    "promoNone": "Description only for now",
+    "noSignal": "No signal",
+    "sideQuests": {
+      "title": "Side quests",
+      "items": [
+        {
+          "name": "Matrix intro",
+          "note": "Terminal-style entrance with a red pill and a blue pill.",
+          "url": "https://portfolio.hassasin.com"
+        },
+        {
+          "name": "One-page CV",
+          "note": "Printable CV generated from a single Markdown source.",
+          "url": "https://onepage.hassasin.com"
+        },
+        {
+          "name": "Not-simple todo list",
+          "note": "Next.js, NestJS, Prisma and PostgreSQL, built to learn the full stack.",
+          "url": "https://github.com/IAmHassasin/not-simple-todo-list"
+        },
+        {
+          "name": "Form animated avatar",
+          "note": "A GSAP avatar that reacts while you fill in a form.",
+          "url": "https://github.com/IAmHassasin/form-animated-avatar"
+        }
+      ]
+    }
+  },
+  "skills": {
+    "eyebrow": "Skill tree",
+    "title": "Core stack",
+    "groups": {
+      "languages": "Languages",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "cloud": "Cloud & DevOps",
+      "data": "Data",
+      "quality": "Quality",
+      "leading": "Leading"
+    },
+    "proseItems": {
+      "quality": ["Code review standards"],
+      "leading": [
+        "Team leadership",
+        "Technical scoping",
+        "Mentoring",
+        "Working with UI/UX and product"
+      ]
+    }
+  },
+  "journey": {
+    "eyebrow": "Save points",
+    "title": "Where I have worked",
+    "entries": [
+      {
+        "period": "07/2025 – now",
+        "role": "Lead Developer",
+        "org": "DS Solution JSC · Hanoi",
+        "points": [
+          "Lead a team of 4 engineers across 2 product lines: architecture, sprint scoping, quality gates and releases.",
+          "Started TeleOperation: low-latency remote operation of heavy machinery, from the media path to failsafe behaviour on link loss.",
+          "Mentor mid and junior engineers through pairing, review standards and onboarding docs."
+        ]
+      },
+      {
+        "period": "10/2022 – 06/2025",
+        "role": "Full-stack Developer",
+        "org": "DS Solution JSC · Hanoi",
+        "points": [
+          "Built cloud microservices on AWS and GCP for EARTHBRAIN and two Atlassian Marketplace apps for enterprise Jira teams.",
+          "Owned application performance.",
+          "Made environments reproducible with Terraform and Serverless Framework."
+        ]
+      },
+      {
+        "period": "06/2021 – 07/2021",
+        "role": "Fresher Web Developer",
+        "org": "MISA JSC",
+        "points": []
+      },
+      {
+        "period": "10/2019 – 12/2019",
+        "role": "Intern Web Developer",
+        "org": "FPT Securities (FPTS)",
+        "points": []
+      }
+    ]
+  },
+  "awards": {
+    "eyebrow": "Achievements",
+    "title": "Unlocked",
+    "unlocked": "Achievement unlocked",
+    "items": [
+      {
+        "name": "AI Innovation Award",
+        "event": "AI Solution Challenge 2026 · DS Solution",
+        "detail": "2nd prize, won with my team.",
+        "linkLabel": "See the announcement",
+        "url": "https://www.facebook.com/share/p/1Gjo7cyAoc/"
+      }
+    ]
+  },
+  "locked": {
+    "eyebrow": "Locked levels",
+    "title": "Coming soon",
+    "intro": "A few things are still in the workshop. Details unlock when they ship.",
+    "items": ["A legend, retold", "Something in the cloud", "A simulation", "Hard mode"],
+    "code": "LV.??",
+    "more": "More loading…"
+  },
+  "contact": {
+    "eyebrow": "Continue?",
+    "title": "Let's build something",
+    "body": "Open to interesting problems, side projects and a good technical chat.",
+    "emailLabel": "Email",
+    "copy": "Copy",
+    "copied": "Copied",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "game": "Play the portfolio game",
+    "cv": "One-page CV",
+    "matrix": "Matrix intro",
+    "saved": "Progress saved."
+  }
+}

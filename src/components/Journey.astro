@@ -1,0 +1,120 @@
+---
+import { SECTION_IDS } from '../config/site';
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale)).journey;
+---
+
+<section id={SECTION_IDS.journey} class="section" aria-labelledby="journey-title">
+  <header class="section-head" data-reveal>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 id="journey-title" class="section-title">
+      {t.title}
+    </h2>
+  </header>
+
+  <ol class="timeline" data-timeline>
+    {t.entries.map((entry, index) => (
+      <li class:list={['save', { current: index === 0 }]} data-reveal>
+        <span class="node" aria-hidden="true" />
+        <p class="period">{entry.period}</p>
+        <div class="content">
+          <h3 class="role">{entry.role}</h3>
+          <p class="org">{entry.org}</p>
+          {entry.points.length > 0 && (
+            <ul class="pixel-bullets points">
+              {entry.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  /* Vertical rail with square save-point nodes (the CV onepage timeline motif). */
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: 36px;
+    margin: 0;
+    padding: 0 0 0 36px;
+    list-style: none;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 7px;
+    width: 2px;
+    background: linear-gradient(
+      var(--color-accent) var(--rail-progress, 100%),
+      var(--color-rule) 0
+    );
+  }
+
+  .save {
+    position: relative;
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 8px 32px;
+  }
+
+  .node {
+    position: absolute;
+    top: 6px;
+    left: -36px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--color-accent);
+    background: var(--color-bg);
+  }
+
+  .current .node {
+    background: var(--color-accent);
+    box-shadow: 0 0 0 6px var(--color-glow);
+  }
+
+  .period {
+    margin: 0;
+    padding-top: 2px;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .content {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+  }
+
+  .role {
+    font-size: 1.375rem;
+    font-weight: 600;
+  }
+
+  .org {
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .points {
+    max-width: 62ch;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .save {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

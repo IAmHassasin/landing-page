@@ -1,0 +1,101 @@
+/*
+ * Design tokens. Palette is inherited from the CV onepage
+ * (portfolio-site/cv-onepage/src/styles.css) so both sites read as one brand;
+ * the pill colors come from the Matrix intro.
+ *
+ * Dark tokens are declared twice on purpose: once for visitors whose OS is dark
+ * and who never toggled (also covers no-JS), once for an explicit dark choice.
+ */
+:root {
+  color-scheme: light;
+
+  --color-bg: #ffffff;
+  --color-surface: #f1f5f4;
+  --color-ink: #14181c;
+  --color-text: #2f3b44;
+  --color-muted: #6e7c87;
+  --color-rule: #d7dee0;
+  --color-accent: #0c5c55;
+  --color-accent-soft: #7fa9a4;
+  --color-on-accent: #ffffff;
+  --color-pill-red: #ff3131;
+  --color-pill-blue: #3182ff;
+
+  /* Promo "screens" stay dark in both themes, like a handheld console display. */
+  --color-screen: #0b1211;
+  --color-screen-ink: #7ee0d0;
+  --color-bezel: #1b2327;
+  --color-bezel-edge: #2c383e;
+  --color-bezel-ink: #a9b8c1;
+  --color-led-live: #3dd68c;
+  --color-led-work: #3dbaa8;
+  --color-led-wip: #e9a23b;
+  --color-grid: rgb(20 24 28 / 0.07);
+  --color-glow: rgb(12 92 85 / 0.18);
+
+  /* Text and marks drawn over the cover photo: same in both themes, the photo is the background. */
+  --color-on-photo: #ffffff;
+  --color-photo-shadow: rgb(0 0 0 / 0.45);
+  --color-sun: #ffd27a;
+  --color-sun-glow: #ffb347;
+  --color-dusk: #ff8a3d;
+
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-pixel: 'VT323', ui-monospace, monospace;
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --content-max: 1200px;
+  --radius-s: 4px;
+  --radius-m: 10px;
+
+  --duration-fast: 150ms;
+  --duration-theme: 450ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --color-bg: #0d1114;
+    --color-surface: #1a2228;
+    --color-ink: #e8eef2;
+    --color-text: #b8c4ce;
+    --color-muted: #8a9aa6;
+    --color-rule: #2a353c;
+    --color-accent: #3dbaa8;
+    --color-accent-soft: #5a8f88;
+    --color-on-accent: #0d1114;
+    --color-bezel: #11171b;
+    --color-bezel-edge: #26323a;
+    --color-grid: rgb(232 238 242 / 0.06);
+    --color-glow: rgb(61 186 168 / 0.16);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #0d1114;
+  --color-surface: #1a2228;
+  --color-ink: #e8eef2;
+  --color-text: #b8c4ce;
+  --color-muted: #8a9aa6;
+  --color-rule: #2a353c;
+  --color-accent: #3dbaa8;
+  --color-accent-soft: #5a8f88;
+  --color-on-accent: #0d1114;
+  --color-bezel: #11171b;
+  --color-bezel-edge: #26323a;
+  --color-grid: rgb(232 238 242 / 0.06);
+  --color-glow: rgb(61 186 168 / 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-theme: 0ms;
+  }
+}

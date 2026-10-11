@@ -1,0 +1,291 @@
+---
+import Avatar from './Avatar.astro';
+import { SECTION_IDS, SITE_LINKS } from '../config/site';
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale));
+// Letters animate individually, but each word stays unbreakable.
+const nameWords = t.hero.name.split(' ').map((word, wordIndex, words) => ({
+  letters: [...word],
+  offset: words.slice(0, wordIndex).join('').length + wordIndex,
+}));
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="intro">
+    <h1 id="hero-title" class="name" aria-label={t.hero.name}>
+      <span class="letters" aria-hidden="true">
+        {nameWords.map((word) => (
+          <span class="word">
+            {word.letters.map((letter, index) => (
+              <span class="letter" style={`--i: ${word.offset + index}`}>
+                {letter}
+              </span>
+            ))}
+          </span>
+        ))}
+      </span>
+      <span class="alias" aria-hidden="true">
+        {t.hero.alias}
+      </span>
+    </h1>
+    <p class="role">{t.hero.role}</p>
+    <p class="lede">{t.hero.intro}</p>
+    <p class="tagline">{t.hero.tagline}</p>
+    <div class="actions">
+      <a class="button button-primary" href={`#${SECTION_IDS.projects}`}>
+        <span class="play-icon" aria-hidden="true"></span>
+        {t.hero.ctaProjects}
+      </a>
+      <a class="button" href={SITE_LINKS.game}>
+        {t.hero.ctaGame}
+      </a>
+      <a class="button button-quiet" href={SITE_LINKS.cv}>
+        {t.hero.ctaCv}
+      </a>
+    </div>
+  </div>
+  <div class="portrait">
+    <Avatar alt={t.hero.avatarAlt} />
+  </div>
+  <a class="press-start" href={`#${SECTION_IDS.projects}`} aria-hidden="true" tabindex="-1">
+    <span>{t.hero.pressStart}</span>
+    <span class="chevron"></span>
+  </a>
+</section>
+
+<style>
+  /* Portrait column is ~1/5 of the viewport on desktop, pinned to the top-right. */
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(200px, 20vw, 320px);
+    grid-template-areas:
+      'intro portrait'
+      'start start';
+    align-items: start;
+    gap: clamp(24px, 4vw, 64px);
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: clamp(16px, 4vw, 48px) var(--gutter) 40px;
+    isolation: isolate;
+  }
+
+  /* Pixel dot grid fading out from the portrait corner. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 30%;
+    z-index: -1;
+    background-image: radial-gradient(var(--color-grid) 1.5px, transparent 1.5px);
+    background-size: 16px 16px;
+    mask-image: radial-gradient(circle at 85% 30%, #000, transparent 70%);
+  }
+
+  /*
+   * With a cover photo: the text starts below the photo, and the cut-out portrait
+   * rises into it, as if standing on the beach in front of the sunset.
+   */
+  :global(.top:has(.cover)) .hero {
+    padding-top: calc(var(--cover-h) + 8px);
+  }
+
+  :global(.top:has(.cover)) .hero::before {
+    display: none;
+  }
+
+  :global(.top:has(.cover)) .portrait {
+    margin-top: calc(-1 * clamp(80px, 18vw, 270px));
+    border-bottom-color: transparent;
+    /* The cut-out has a hard bottom edge; let it dissolve into the page instead. */
+    mask-image: linear-gradient(to bottom, #000 72%, transparent);
+  }
+
+  .intro {
+    grid-area: intro;
+    padding-top: clamp(8px, 3vw, 48px);
+  }
+
+  .portrait {
+    grid-area: portrait;
+    border-bottom: 2px solid var(--color-accent);
+  }
+
+  .name {
+    font-size: clamp(2.75rem, 8vw, 6.5rem);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .letters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    column-gap: 0.28em;
+  }
+
+  .word {
+    display: inline-flex;
+    white-space: nowrap;
+  }
+
+  /* Letters drop in one by one on load, like a title screen; the end state is the resting state. */
+  .letter {
+    display: inline-block;
+    animation: drop 600ms var(--ease-out) both;
+    animation-delay: calc(var(--i) * 45ms + 120ms);
+  }
+
+  .alias {
+    display: block;
+    margin-top: 10px;
+    color: var(--color-accent);
+    font-family: var(--font-pixel);
+    font-size: 0.42em;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  .role {
+    margin: 24px 0 0;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: clamp(0.9375rem, 1.6vw, 1.125rem);
+  }
+
+  .lede {
+    max-width: 52ch;
+    margin: 14px 0 0;
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  }
+
+  .tagline {
+    margin: 12px 0 0;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-s);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 var(--color-ink);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--color-ink);
+  }
+
+  .button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--color-ink);
+  }
+
+  .button-primary {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .button-quiet {
+    border-color: transparent;
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .button-quiet:hover {
+    box-shadow: none;
+  }
+
+  .play-icon {
+    width: 10px;
+    height: 12px;
+    margin-right: 10px;
+    background: currentColor;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+
+  .press-start {
+    grid-area: start;
+    justify-self: center;
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 1.25rem;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    text-transform: uppercase;
+    animation: blink 1.2s steps(1) infinite;
+  }
+
+  .chevron {
+    width: 10px;
+    height: 10px;
+    border-right: 3px solid currentColor;
+    border-bottom: 3px solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  @keyframes drop {
+    from {
+      opacity: 0;
+      transform: translateY(-0.4em);
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0.2;
+    }
+  }
+
+  /* Mobile: small portrait sits next to the name. */
+  @media (max-width: 640px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) 104px;
+      grid-template-areas:
+        'intro portrait'
+        'intro .'
+        'start start';
+      gap: 16px;
+    }
+
+    .intro {
+      padding-top: 0;
+    }
+
+    .hero::before {
+      inset: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .letter,
+    .press-start {
+      animation: none;
+    }
+  }
+</style>

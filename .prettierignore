@@ -1,0 +1,7 @@
+dist/
+.astro/
+node_modules/
+tools/avatar/.venv/
+tools/avatar/input/
+tools/avatar/output/
+package-lock.json

@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "title": "Khả Phạm (Hassasin) — Senior Full-stack Engineer",
+    "description": "Portfolio của Khả Phạm, aka Hassasin: senior full-stack engineer, R&D lead và người mê làm game indie."
+  },
+  "language": {
+    "code": "VI",
+    "selfName": "Tiếng Việt",
+    "switchLabel": "Chọn ngôn ngữ"
+  },
+  "a11y": {
+    "skipToContent": "Chuyển đến nội dung"
+  },
+  "nav": {
+    "label": "Các phần",
+    "projects": "Dự án",
+    "skills": "Kỹ năng",
+    "journey": "Hành trình",
+    "awards": "Giải thưởng",
+    "contact": "Liên hệ"
+  },
+  "theme": {
+    "toLight": "Chuyển sang giao diện sáng",
+    "toDark": "Chuyển sang giao diện tối"
+  },
+  "hero": {
+    "prompt": "hassasin.com",
+    "name": "Khả Phạm",
+    "alias": "aka Hassasin",
+    "role": "Senior Full-stack Engineer · R&D / Product Lead",
+    "tagline": "“Cái gì có thể hỏng, thì sẽ hỏng”",
+    "intro": "Ban ngày tôi xây sản phẩm cloud cho khách hàng doanh nghiệp Nhật Bản, ban đêm làm game, pipeline AI và đủ loại công cụ. Hà Nội, Việt Nam.",
+    "ctaProjects": "Xem các dự án",
+    "ctaGame": "Chơi game",
+    "ctaCv": "Xem CV",
+    "pressStart": "Nhấn để bắt đầu",
+    "avatarAlt": "Ảnh chân dung Khả Phạm đeo kính"
+  },
+  "notFound": {
+    "eyebrow": "Game over",
+    "title": "Màn này không tồn tại",
+    "body": "Không tìm thấy trang bạn cần. Có thể trang đã đổi chỗ, hoặc đường dẫn bị gõ sai.",
+    "home": "Về màn đầu"
+  },
+  "cover": {
+    "stage": "Màn 01",
+    "timeLight": "Nắng chiều",
+    "timeDark": "Hoàng hôn"
+  },
+  "stats": {
+    "label": "Chỉ số nhân vật",
+    "items": [
+      { "value": "5", "suffix": "năm", "label": "làm full-stack cho sản phẩm thật" },
+      { "value": "2", "suffix": "app", "label": "đang bán trên Atlassian Marketplace" },
+      { "value": "5", "suffix": "nền tảng", "label": "nền tảng doanh nghiệp đã ra mắt" },
+      { "value": "4", "suffix": "dev", "label": "trong team tôi dẫn dắt từ 2025" }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Nhật ký nhiệm vụ",
+    "title": "Những thứ tôi làm ngoài giờ",
+    "intro": "Dự án cá nhân: game, pipeline AI, công cụ và thử nghiệm media. Mỗi dự án dạy tôi một điều mà giờ tôi dùng trong công việc.",
+    "filterLabel": "Lọc dự án theo nhóm",
+    "all": "Tất cả",
+    "categories": {
+      "games": "Game",
+      "ai": "AI & tự động hóa",
+      "tools": "Công cụ & web",
+      "media": "Media & streaming"
+    },
+    "status": {
+      "live": "Đang chạy",
+      "working": "Dùng được",
+      "prototype": "Bản thử",
+      "inProgress": "Đang làm"
+    },
+    "links": {
+      "play": "Chơi thử",
+      "live": "Mở trang",
+      "repo": "Mã nguồn trên GitHub"
+    },
+    "stackLabel": "Công nghệ",
+    "highlightsLabel": "Điểm nổi bật",
+    "promoLabel": "Clip giới thiệu",
+    "promoPending": "Clip giới thiệu sắp có",
+    "promoNone": "Tạm thời chỉ có mô tả",
+    "noSignal": "Mất tín hiệu",
+    "sideQuests": {
+      "title": "Nhiệm vụ phụ",
+      "items": [
+        {
+          "name": "Matrix intro",
+          "note": "Màn mở đầu kiểu terminal với viên thuốc đỏ và viên thuốc xanh.",
+          "url": "https://portfolio.hassasin.com"
+        },
+        {
+          "name": "CV một trang",
+          "note": "CV in được, tạo từ một file Markdown duy nhất.",
+          "url": "https://onepage.hassasin.com"
+        },
+        {
+          "name": "Not-simple todo list",
+          "note": "Next.js, NestJS, Prisma và PostgreSQL, làm để học trọn bộ full-stack.",
+          "url": "https://github.com/IAmHassasin/not-simple-todo-list"
+        },
+        {
+          "name": "Form animated avatar",
+          "note": "Avatar GSAP phản ứng khi bạn điền form.",
+          "url": "https://github.com/IAmHassasin/form-animated-avatar"
+        }
+      ]
+    }
+  },
+  "skills": {
+    "eyebrow": "Cây kỹ năng",
+    "title": "Công nghệ chính",
+    "groups": {
+      "languages": "Ngôn ngữ",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "cloud": "Cloud & DevOps",
+      "data": "Dữ liệu",
+      "quality": "Chất lượng",
+      "leading": "Dẫn dắt"
+    },
+    "proseItems": {
+      "quality": ["Chuẩn review code"],
+      "leading": [
+        "Dẫn dắt team",
+        "Phân tích phạm vi kỹ thuật",
+        "Kèm cặp thành viên",
+        "Phối hợp với UI/UX và product"
+      ]
+    }
+  },
+  "journey": {
+    "eyebrow": "Điểm lưu game",
+    "title": "Nơi tôi đã làm việc",
+    "entries": [
+      {
+        "period": "07/2025 – nay",
+        "role": "Lead Developer",
+        "org": "DS Solution JSC · Hà Nội",
+        "points": [
+          "Dẫn dắt team 4 kỹ sư trên 2 dòng sản phẩm: kiến trúc, phạm vi sprint, kiểm soát chất lượng và phát hành.",
+          "Khởi động TeleOperation: điều khiển máy công trình từ xa với độ trễ thấp, từ đường truyền media đến cơ chế an toàn khi mất kết nối.",
+          "Kèm cặp kỹ sư mid và junior qua pair programming, chuẩn review và tài liệu onboarding."
+        ]
+      },
+      {
+        "period": "10/2022 – 06/2025",
+        "role": "Full-stack Developer",
+        "org": "DS Solution JSC · Hà Nội",
+        "points": [
+          "Xây microservice trên AWS và GCP cho EARTHBRAIN và hai app Atlassian Marketplace phục vụ các team Jira doanh nghiệp.",
+          "Chịu trách nhiệm hiệu năng ứng dụng.",
+          "Đưa môi trường về dạng tái tạo được bằng Terraform và Serverless Framework."
+        ]
+      },
+      {
+        "period": "06/2021 – 07/2021",
+        "role": "Fresher Web Developer",
+        "org": "MISA JSC",
+        "points": []
+      },
+      {
+        "period": "10/2019 – 12/2019",
+        "role": "Intern Web Developer",
+        "org": "FPT Securities (FPTS)",
+        "points": []
+      }
+    ]
+  },
+  "awards": {
+    "eyebrow": "Thành tích",
+    "title": "Đã mở khóa",
+    "unlocked": "Mở khóa thành tích",
+    "items": [
+      {
+        "name": "AI Innovation Award",
+        "event": "AI Solution Challenge 2026 · DS Solution",
+        "detail": "Giải nhì, cùng team của tôi.",
+        "linkLabel": "Xem bài công bố",
+        "url": "https://www.facebook.com/share/p/1Gjo7cyAoc/"
+      }
+    ]
+  },
+  "locked": {
+    "eyebrow": "Màn chưa mở",
+    "title": "Sắp ra mắt",
+    "intro": "Vài thứ vẫn đang trong xưởng. Chi tiết sẽ mở khóa khi ra mắt.",
+    "items": ["Một truyền thuyết, kể lại", "Thứ gì đó trên mây", "Một màn giả lập", "Chế độ khó"],
+    "code": "LV.??",
+    "more": "Đang tải thêm…"
+  },
+  "contact": {
+    "eyebrow": "Chơi tiếp?",
+    "title": "Cùng làm gì đó nhé",
+    "body": "Sẵn sàng cho những bài toán thú vị, dự án phụ và những cuộc trò chuyện kỹ thuật hay.",
+    "emailLabel": "Email",
+    "copy": "Sao chép",
+    "copied": "Đã chép",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "game": "Chơi game portfolio",
+    "cv": "CV một trang",
+    "matrix": "Matrix intro",
+    "saved": "Đã lưu tiến trình."
+  }
+}

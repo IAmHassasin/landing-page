@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Awards from './Awards.astro';
+import ContactSection from './ContactSection.astro';
+import CoverBand from './CoverBand.astro';
+import Hero from './Hero.astro';
+import Journey from './Journey.astro';
+import LockedLevels from './LockedLevels.astro';
+import ProjectShowcase from './ProjectShowcase.astro';
+import SiteHeader from './SiteHeader.astro';
+import SkillTree from './SkillTree.astro';
+import StatsHud from './StatsHud.astro';
+---
+
+<BaseLayout>
+  <SiteHeader />
+  <main id="main">
+    <div class="top">
+      <CoverBand />
+      <Hero />
+    </div>
+    <StatsHud />
+    <ProjectShowcase />
+    <SkillTree />
+    <Journey />
+    <Awards />
+    <LockedLevels />
+    <ContactSection />
+  </main>
+</BaseLayout>
+
+<style>
+  /* --cover-h is shared by the cover photo and the hero, which starts where the photo ends. */
+  .top {
+    --cover-h: clamp(220px, 36vw, 500px);
+
+    position: relative;
+    isolation: isolate;
+  }
+</style>
+
+<script>
+  import '../scripts/interactions';
+</script>

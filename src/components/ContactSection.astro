@@ -1,0 +1,151 @@
+---
+import { CONTACT_EMAIL, SECTION_IDS, SITE_LINKS } from '../config/site';
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale)).contact;
+const links = [
+  { label: t.game, url: SITE_LINKS.game },
+  { label: t.cv, url: SITE_LINKS.cv },
+  { label: t.github, url: SITE_LINKS.github },
+  { label: t.linkedin, url: SITE_LINKS.linkedin },
+  { label: t.matrix, url: SITE_LINKS.matrixIntro },
+];
+---
+
+<section id={SECTION_IDS.contact} class="section contact" aria-labelledby="contact-title">
+  <div class="panel" data-reveal>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 id="contact-title" class="section-title">
+      {t.title}
+    </h2>
+    <p class="section-intro">{t.body}</p>
+
+    <div class="email-row">
+      <span class="email-label">{t.emailLabel}</span>
+      <!-- Split into spans and only turned into a mailto link by the script. -->
+      <a class="email" data-email data-user={CONTACT_EMAIL.user} data-domain={CONTACT_EMAIL.domain}>
+        <span>{CONTACT_EMAIL.user}</span>
+        <span>&#64;</span>
+        <span>{CONTACT_EMAIL.domain}</span>
+      </a>
+      <button type="button" class="copy" data-copy-email data-label-copied={t.copied} hidden>
+        {t.copy}
+      </button>
+    </div>
+
+    <ul class="links">
+      {links.map((link) => (
+        <li>
+          <a href={link.url} target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p class="saved" aria-hidden="true">
+    <span class="saved-icon"></span>
+    {t.saved}
+  </p>
+</section>
+
+<style>
+  .contact {
+    padding-bottom: 48px;
+  }
+
+  .panel {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    padding: clamp(28px, 5vw, 56px);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-m);
+    box-shadow: 8px 8px 0 var(--color-ink);
+    background: var(--color-bg);
+  }
+
+  .email-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 16px;
+    margin-top: 8px;
+  }
+
+  .email-label {
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 1.25rem;
+    text-transform: uppercase;
+  }
+
+  .email {
+    display: inline-flex;
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: clamp(1.0625rem, 2.6vw, 1.5rem);
+    font-weight: 500;
+  }
+
+  .copy {
+    min-height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-s);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    cursor: pointer;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  .saved {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 40px 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .saved-icon {
+    width: 12px;
+    height: 12px;
+    background: var(--color-accent);
+    animation: spin 1.6s steps(4) infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .saved-icon {
+      animation: none;
+    }
+  }
+</style>

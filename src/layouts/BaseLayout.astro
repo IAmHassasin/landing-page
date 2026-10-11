@@ -1,0 +1,59 @@
+---
+import '@fontsource/archivo/600.css';
+import '@fontsource/archivo/800.css';
+import '@fontsource/source-sans-3/400.css';
+import '@fontsource/source-sans-3/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/vt323/400.css';
+import '../styles/global.css';
+import { THEME_STORAGE_KEY } from '../config/site';
+import { LOCALES, getDictionary, getHomePath, toLocale } from '../i18n';
+
+const locale = toLocale(Astro.currentLocale);
+const t = getDictionary(locale);
+const canonical = new URL(getHomePath(locale), Astro.site);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <link rel="canonical" href={canonical} />
+    {LOCALES.map((alt) => (
+      <link rel="alternate" hreflang={alt} href={new URL(getHomePath(alt), Astro.site)} />
+    ))}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!--
+      Must run before first paint to avoid a flash of the wrong theme, so it stays inline.
+      An explicit choice wins; otherwise follow the OS setting.
+    -->
+    <script is:inline define:vars={{ storageKey: THEME_STORAGE_KEY }}>
+      let stored = null;
+      try {
+        stored = localStorage.getItem(storageKey);
+      } catch {
+        // Storage can be blocked (private mode, disabled cookies); fall back to the OS setting.
+      }
+      const isExplicit = stored === 'light' || stored === 'dark';
+      document.documentElement.dataset.theme = isExplicit
+        ? stored
+        : matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      // Lets CSS hold JS-driven entrance effects (e.g. the cover's pixel reveal) until the script is ready.
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {t.a11y.skipToContent}
+    </a>
+    <slot />
+  </body>
+</html>
