@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Kha Pham (Hassasin) — Senior Full-stack Engineer",
-    "description": "Portfolio of Kha Pham, aka Hassasin: senior full-stack engineer, R&D lead and indie game tinkerer."
+    "description": "Kha Pham, aka Hassasin: senior full-stack engineer who designs games and personal websites with a style of their own, and joins project teams part-time."
   },
   "language": {
     "code": "EN",
@@ -13,6 +13,7 @@
   },
   "nav": {
     "label": "Sections",
+    "help": "Work with me",
     "projects": "Projects",
     "skills": "Skills",
     "journey": "Journey",
@@ -29,8 +30,8 @@
     "alias": "aka Hassasin",
     "role": "Senior Full-stack Engineer · R&D / Product Lead",
     "tagline": "“Anything that can go wrong, will go wrong”",
-    "intro": "I build cloud products for Japanese enterprise clients by day, and games, AI pipelines and odd tools by night. Hanoi, Vietnam.",
-    "ctaProjects": "See the projects",
+    "intro": "I design and build things with a personal style: games, game ideas and personal websites. By day I lead a team building cloud products for Japanese enterprise clients. Hanoi, Vietnam.",
+    "ctaHelp": "What I can do for you",
     "ctaGame": "Play the game",
     "ctaCv": "Read the CV",
     "pressStart": "Press start",
@@ -46,6 +47,55 @@
     "stage": "Stage 01",
     "timeLight": "Golden hour",
     "timeDark": "After dark"
+  },
+  "help": {
+    "eyebrow": "Join the party",
+    "title": "What I can do for you",
+    "intro": "My strongest skill is creativity: designing things that carry a personal style instead of looking like a template. Bring an idea, and I will help you shape it, design it and build it.",
+    "offers": [
+      {
+        "tag": "Games",
+        "title": "Game ideas & game design",
+        "summary": "Have a game idea that is still a sketch? I help turn it into rules, a core loop and something you can play.",
+        "points": [
+          "Shape the concept: mechanics, progression and what makes it fun.",
+          "Build a quick browser prototype to test the idea early.",
+          "Rework a familiar genre into something new, like my PvZ survival roguelike."
+        ]
+      },
+      {
+        "tag": "Web",
+        "title": "Personal websites",
+        "summary": "A site that looks like you: a portfolio, a landing page or a small web app with its own character.",
+        "points": [
+          "Visual identity, layout and motion designed around you.",
+          "Fast static sites with light and dark themes and more than one language.",
+          "Domain, hosting and deployment set up end to end."
+        ]
+      },
+      {
+        "tag": "Teams",
+        "title": "Part-time on your project",
+        "summary": "Need an extra pair of hands? I join project teams part-time, from the idea stage to shipping.",
+        "points": [
+          "Full-stack work: React, Node.js / NestJS and the cloud.",
+          "Technical scoping, code review and clear handover docs.",
+          "Comfortable leading a small team or working inside one."
+        ]
+      }
+    ],
+    "traitsLabel": "Perks",
+    "traits": [
+      {
+        "name": "Creative, with a personal style",
+        "detail": "This site, a CV you can walk around in, a roguelike rework of a classic: I like things with character."
+      },
+      {
+        "name": "Fast learner, wide range",
+        "detail": "Games, AI pipelines, video streaming, cloud: I pick up a new field quickly and connect the pieces."
+      }
+    ],
+    "cta": "Tell me about your idea"
   },
   "stats": {
     "label": "Player stats",
@@ -196,7 +246,7 @@
   "contact": {
     "eyebrow": "Continue?",
     "title": "Let's build something",
-    "body": "Open to interesting problems, side projects and a good technical chat.",
+    "body": "Got a game idea, a personal site in mind, or a team that needs a hand part-time? Tell me about it.",
     "emailLabel": "Email",
     "copy": "Copy",
     "copied": "Copied",

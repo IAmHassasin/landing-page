@@ -33,9 +33,9 @@ const nameWords = t.hero.name.split(' ').map((word, wordIndex, words) => ({
     <p class="lede">{t.hero.intro}</p>
     <p class="tagline">{t.hero.tagline}</p>
     <div class="actions">
-      <a class="button button-primary" href={`#${SECTION_IDS.projects}`}>
+      <a class="button button-primary" href={`#${SECTION_IDS.help}`}>
         <span class="play-icon" aria-hidden="true"></span>
-        {t.hero.ctaProjects}
+        {t.hero.ctaHelp}
       </a>
       <a class="button" href={SITE_LINKS.game}>
         {t.hero.ctaGame}
@@ -48,7 +48,7 @@ const nameWords = t.hero.name.split(' ').map((word, wordIndex, words) => ({
   <div class="portrait">
     <Avatar alt={t.hero.avatarAlt} />
   </div>
-  <a class="press-start" href={`#${SECTION_IDS.projects}`} aria-hidden="true" tabindex="-1">
+  <a class="press-start" href={`#${SECTION_IDS.help}`} aria-hidden="true" tabindex="-1">
     <span>{t.hero.pressStart}</span>
     <span class="chevron"></span>
   </a>

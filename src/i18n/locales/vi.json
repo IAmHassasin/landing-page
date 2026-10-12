@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Khả Phạm (Hassasin) — Senior Full-stack Engineer",
-    "description": "Portfolio của Khả Phạm, aka Hassasin: senior full-stack engineer, R&D lead và người mê làm game indie."
+    "description": "Khả Phạm, aka Hassasin: senior full-stack engineer thiết kế game và website cá nhân mang phong cách riêng, nhận tham gia dự án part-time."
   },
   "language": {
     "code": "VI",
@@ -13,6 +13,7 @@
   },
   "nav": {
     "label": "Các phần",
+    "help": "Hợp tác",
     "projects": "Dự án",
     "skills": "Kỹ năng",
     "journey": "Hành trình",
@@ -29,8 +30,8 @@
     "alias": "aka Hassasin",
     "role": "Senior Full-stack Engineer · R&D / Product Lead",
     "tagline": "“Cái gì có thể hỏng, thì sẽ hỏng”",
-    "intro": "Ban ngày tôi xây sản phẩm cloud cho khách hàng doanh nghiệp Nhật Bản, ban đêm làm game, pipeline AI và đủ loại công cụ. Hà Nội, Việt Nam.",
-    "ctaProjects": "Xem các dự án",
+    "intro": "Tôi thiết kế và làm ra những thứ mang phong cách riêng: game, ý tưởng game và website cá nhân. Ban ngày tôi dẫn dắt một team xây sản phẩm cloud cho khách hàng doanh nghiệp Nhật Bản. Hà Nội, Việt Nam.",
+    "ctaHelp": "Tôi giúp được gì cho bạn",
     "ctaGame": "Chơi game",
     "ctaCv": "Xem CV",
     "pressStart": "Nhấn để bắt đầu",
@@ -46,6 +47,55 @@
     "stage": "Màn 01",
     "timeLight": "Nắng chiều",
     "timeDark": "Hoàng hôn"
+  },
+  "help": {
+    "eyebrow": "Mời vào party",
+    "title": "Tôi có thể giúp gì cho bạn",
+    "intro": "Điểm mạnh nhất của tôi là sáng tạo: thiết kế những thứ mang phong cách riêng thay vì trông như một template. Bạn mang ý tưởng tới, tôi giúp định hình, thiết kế và làm ra nó.",
+    "offers": [
+      {
+        "tag": "Game",
+        "title": "Ý tưởng game & game design",
+        "summary": "Có ý tưởng game mới chỉ là bản phác? Tôi giúp biến nó thành luật chơi, vòng lặp cốt lõi và một bản chơi được.",
+        "points": [
+          "Định hình concept: cơ chế, tiến trình và điều làm game vui.",
+          "Dựng nhanh bản thử chạy trên trình duyệt để kiểm chứng ý tưởng sớm.",
+          "Làm mới một thể loại quen thuộc, như bản PvZ sinh tồn kiểu roguelike của tôi."
+        ]
+      },
+      {
+        "tag": "Web",
+        "title": "Website cá nhân",
+        "summary": "Một trang web giống bạn: portfolio, landing page hay web app nhỏ có cá tính riêng.",
+        "points": [
+          "Nhận diện, bố cục và chuyển động thiết kế quanh con người bạn.",
+          "Trang tĩnh nhanh, có giao diện sáng và tối, nhiều ngôn ngữ.",
+          "Lo trọn domain, hosting và triển khai."
+        ]
+      },
+      {
+        "tag": "Team",
+        "title": "Tham gia dự án part-time",
+        "summary": "Cần thêm người? Tôi nhận tham gia các đội dự án part-time, từ lúc còn là ý tưởng đến khi ra mắt.",
+        "points": [
+          "Làm full-stack: React, Node.js / NestJS và cloud.",
+          "Phân tích phạm vi kỹ thuật, review code và tài liệu bàn giao rõ ràng.",
+          "Dẫn dắt team nhỏ hoặc làm thành viên đều ổn."
+        ]
+      }
+    ],
+    "traitsLabel": "Nội tại",
+    "traits": [
+      {
+        "name": "Sáng tạo, có phong cách riêng",
+        "detail": "Trang này, một CV đi dạo được, một bản roguelike làm lại từ game kinh điển: tôi thích những thứ có cá tính."
+      },
+      {
+        "name": "Học nhanh, hiểu biết rộng",
+        "detail": "Game, pipeline AI, streaming video, cloud: tôi nắm lĩnh vực mới nhanh và kết nối chúng lại với nhau."
+      }
+    ],
+    "cta": "Kể tôi nghe ý tưởng của bạn"
   },
   "stats": {
     "label": "Chỉ số nhân vật",
@@ -196,7 +246,7 @@
   "contact": {
     "eyebrow": "Chơi tiếp?",
     "title": "Cùng làm gì đó nhé",
-    "body": "Sẵn sàng cho những bài toán thú vị, dự án phụ và những cuộc trò chuyện kỹ thuật hay.",
+    "body": "Có ý tưởng game, muốn một website cá nhân, hay team cần thêm người part-time? Kể tôi nghe nhé.",
     "emailLabel": "Email",
     "copy": "Sao chép",
     "copied": "Đã chép",

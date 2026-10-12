@@ -1,0 +1,196 @@
+---
+import { SECTION_IDS } from '../config/site';
+import { getDictionary, toLocale } from '../i18n';
+
+const t = getDictionary(toLocale(Astro.currentLocale)).help;
+---
+
+<section id={SECTION_IDS.help} class="section help" aria-labelledby="help-title">
+  <header class="section-head" data-reveal>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 id="help-title" class="section-title">
+      {t.title}
+    </h2>
+    <p class="section-intro">{t.intro}</p>
+  </header>
+
+  <ul class="offers">
+    {t.offers.map((offer, index) => (
+      <li class="offer" data-reveal>
+        <p class="offer-tag">
+          <span class="offer-index" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          {offer.tag}
+        </p>
+        <h3 class="offer-title">{offer.title}</h3>
+        <p class="offer-summary">{offer.summary}</p>
+        <ul class="pixel-bullets">
+          {offer.points.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ul>
+
+  <div class="traits" data-reveal>
+    <p class="traits-label">{t.traitsLabel}</p>
+    <ul class="trait-list">
+      {t.traits.map((trait) => (
+        <li class="trait">
+          <span class="trait-name">{trait.name}</span>
+          <span class="trait-detail">{trait.detail}</span>
+        </li>
+      ))}
+    </ul>
+    <a class="cta" href={`#${SECTION_IDS.contact}`}>
+      {t.cta}
+      <span class="arrow" aria-hidden="true"></span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .offers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Quest-board card: lifts and lights its top edge on hover. */
+  .offer {
+    display: grid;
+    align-content: start;
+    gap: 14px;
+    padding: 24px;
+    border: 1px solid var(--color-rule);
+    border-top: 4px solid var(--color-rule);
+    border-radius: var(--radius-m);
+    background: var(--color-surface);
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
+  }
+
+  .offer:hover {
+    border-top-color: var(--color-accent);
+    box-shadow: 0 0 0 6px var(--color-glow);
+    transform: translateY(-4px);
+  }
+
+  .offer-tag {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .offer-index {
+    color: var(--color-muted);
+    font-family: var(--font-pixel);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .offer-title {
+    font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+    font-weight: 800;
+  }
+
+  .offer-summary {
+    margin: 0;
+    color: var(--color-ink);
+  }
+
+  .traits {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px 32px;
+    margin-top: 24px;
+    padding: 20px 24px;
+    border: 1px dashed var(--color-rule);
+    border-radius: var(--radius-m);
+  }
+
+  .traits-label {
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-pixel);
+    font-size: 1.375rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .trait-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 12px 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trait {
+    display: grid;
+    gap: 2px;
+  }
+
+  .trait-name {
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  .trait-detail {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .arrow {
+    width: 10px;
+    height: 12px;
+    background: currentColor;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .cta:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 860px) {
+    .traits {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .offer:hover,
+    .cta:hover .arrow {
+      transform: none;
+    }
+  }
+</style>

@@ -14,6 +14,7 @@ export const THEME_STORAGE_KEY = 'hassasin-theme';
 
 // Section anchors shared by the header nav and the sections themselves.
 export const SECTION_IDS = {
+  help: 'help',
   projects: 'projects',
   skills: 'skills',
   journey: 'journey',

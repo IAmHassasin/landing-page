@@ -6,6 +6,7 @@ import { getDictionary, toLocale } from '../i18n';
 
 const t = getDictionary(toLocale(Astro.currentLocale));
 const navItems = [
+  { id: SECTION_IDS.help, label: t.nav.help },
   { id: SECTION_IDS.projects, label: t.nav.projects },
   { id: SECTION_IDS.skills, label: t.nav.skills },
   { id: SECTION_IDS.journey, label: t.nav.journey },
